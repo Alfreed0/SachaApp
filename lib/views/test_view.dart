@@ -4,7 +4,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 class TestView extends StatefulWidget {
   final BluetoothDevice? connectedDevice;
 
-  TestView({Key? key, required this.connectedDevice}) : super(key: key);
+  const TestView({Key? key, required this.connectedDevice}) : super(key: key);
 
   @override
   TestViewState createState() => TestViewState();
