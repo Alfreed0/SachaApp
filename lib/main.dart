@@ -1,4 +1,5 @@
 import 'package:ble_connection/services/twilio_service.dart';
+import 'package:ble_connection/services/extern_service.dart';
 import 'package:ble_connection/views/alert_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -39,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
   final GlobalKey<TestViewState> _testViewKey = GlobalKey<TestViewState>();
   final TwilioService twilioService  = TwilioService();
+  final ExternalApiService externalApiService = ExternalApiService();
 
   //PRUEBAS
    int _signalCount = 0;
@@ -180,7 +182,8 @@ void _listenToCharacteristic(BluetoothCharacteristic c){
       });
 
       if (_signalCount == 2) {
-        _sendAlert();
+        //_sendAlert();
+        externalApiService("https://200.10.147.201:5025/api/BotonPanic");
         _signalCount = 0;
         _isAlertSent = true;
       }

@@ -5,26 +5,27 @@ class ExternalApiService {
 
   Future<bool> sendAlertToExternalApi(String apiUrl) async {
     String locationMessage = await _getCurrentLocation();
-    String code = "Alerta!! Peligro de seguridad, mi ubicación: $locationMessage";
+    String code = "Alerta!! Peligro de seguridad, mi ubicación:";
 
-    return await _sendAlertToApi(apiUrl, code); 
+    return await _sendAlertToApi(apiUrl, code, locationMessage); 
   }
 
   Future<String> _getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-    return "Lat: ${position.latitude}, Long: ${position.longitude}";
+    //return "Lat: ${position.latitude}, Long: ${position.longitude}";
+    return "https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}"
   }
 
-  Future<bool> _sendAlertToApi(String apiUrl, String message) async {
+  Future<bool> _sendAlertToApi(String apiUrl, String message, String location) async {
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: '{"message": "$message"}',
+        body: '{"message": "$message", "location": "$location"}',
       );
 
       if (response.statusCode == 200) {
