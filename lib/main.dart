@@ -1,25 +1,35 @@
-import 'package:ble_connection/services/twilio_service.dart';
+import 'dart:typed_data';
+
 import 'package:ble_connection/services/extern_service.dart';
 import 'package:ble_connection/views/alert_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'ble_manager.dart';
 import 'views/connection_view.dart';
 import 'views/test_view.dart';
 import 'dart:async';
+ import 'dart:io';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
-
+ class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
+}                  
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return const MaterialApp(
       home: MyHomePage(),
     );
@@ -39,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   BluetoothDevice? _connectedDevice;
   int _currentIndex = 0;
   final GlobalKey<TestViewState> _testViewKey = GlobalKey<TestViewState>();
-  final TwilioService twilioService  = TwilioService();
+  //final TwilioService twilioService  = TwilioService();
   final ExternalApiService externalApiService = ExternalApiService();
 
   //PRUEBAS
@@ -165,16 +175,16 @@ class _MyHomePageState extends State<MyHomePage> {
 void _listenToCharacteristic(BluetoothCharacteristic c){
     c.setNotifyValue(true);
     c.value.listen((value) {
-      print(value);
+    print("Esto manda la placa");
    if (value.isNotEmpty && value[0] == 1) {
-      print(_signalCount);
+    print("signal count ");
+    print(_signalCount);
       if(_isAlertSent){
         _signalCount = 0;
         _isAlertSent = false;
       }
-      _signalCount++;
       _timer?.cancel();
-
+      _signalCount++;
       _timer = Timer(Duration(seconds: 15), () {
         setState(() {
           _signalCount = 0;
@@ -182,8 +192,7 @@ void _listenToCharacteristic(BluetoothCharacteristic c){
       });
 
       if (_signalCount == 2) {
-        //_sendAlert();
-        externalApiService("https://200.10.147.201:5025/api/BotonPanic");
+        _sendAlert();
         _signalCount = 0;
         _isAlertSent = true;
       }
@@ -222,7 +231,7 @@ void _listenToCharacteristic(BluetoothCharacteristic c){
 }*/
     Future<void> _sendAlert() async {
       print("ENVIANDO ALERTA...");
-      bool apiCallSuccess = (await twilioService.sendAlert("+593996909537")) ;
+      bool apiCallSuccess = (await externalApiService.sendAlertToExternalApi("https://200.10.147.201:5025/api/BotonPanic"));
       if (apiCallSuccess){  
          showDialog(
                     context: context,

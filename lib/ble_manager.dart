@@ -9,8 +9,12 @@ class BLEManager {
   Future<void> startScanning() async {
     final status = await Permission.location.request();
     if (status.isGranted) {
+      final serviceUuids = [
+           Guid('00001bc0-0000-1000-8000-00805f9b34fb'),
+      ];
       await _flutterBlue.startScan(
-          timeout: const Duration(seconds: 4));
+          timeout: const Duration(seconds: 4),
+          withServices: serviceUuids);
     }
   }
 
