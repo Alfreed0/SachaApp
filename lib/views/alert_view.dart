@@ -7,7 +7,7 @@ class AlertView extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        "Sacha device's alerts",
+        "Alertas dispositivo Sacha",
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
     );

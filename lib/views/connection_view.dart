@@ -92,7 +92,7 @@ class _ConnectionViewState extends State<ConnectionView> {
           );
         } else if (filteredDevices.isEmpty) {
           return const Center(
-            child: Text('No devices available', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+            child: Text('No hay dispositivos disponibles', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
           );
         } else {
           return ListView.builder(

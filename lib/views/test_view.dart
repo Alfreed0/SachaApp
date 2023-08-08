@@ -11,13 +11,13 @@ class TestView extends StatefulWidget {
 }
 
 class TestViewState extends State<TestView> {
-  String _message = 'Test your Sacha device';
+  String _message = 'Prueba tu dispositivo Sacha';
 
   @override
   Widget build(BuildContext context) {
     return widget.connectedDevice == null ? const Center(
       child: Text(
-        'No active connection',
+        'Sin conexiones activas',
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
     ) : Center(
@@ -36,7 +36,7 @@ class TestViewState extends State<TestView> {
     Future.delayed(const Duration(seconds: 3)).then((_) {
       if (mounted) {
         setState(() {
-          _message = 'Test your Sacha device';
+          _message = 'Prueba tu dispositivo Sacha';
         });
       }
     });

@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-
+import 'views/splash_screen.dart';
 import 'package:ble_connection/services/extern_service.dart';
 import 'package:ble_connection/views/alert_view.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +30,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return const MaterialApp(
-      home: MyHomePage(),
+    return MaterialApp(
+      
+      home: SplashScreen()
     );
   }
 }
@@ -67,17 +68,27 @@ class _MyHomePageState extends State<MyHomePage> {
         toolbarHeight: 80,
         centerTitle: false,
         titleSpacing: 0,
-        title: Transform(
-          transform: Matrix4.translationValues(10, 0, 0),
-          child: const Text(
-            'Sacha',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+        title:Row(
+          children: [
+            Transform(
+              transform: Matrix4.translationValues(10, 0, 0), // Mueve el texto hacia la izquierda
+              child: const Text(
+                'Sacha',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
             ),
-          ),
-        ),
+            SizedBox(width: 15), // Espacio entre el texto y la imagen
+            Image.asset(
+              'assets/images/logo-p1.png', // Cambia la ruta por la de tu imagen
+              height: 60, // Ajusta la altura de la imagen según tu diseño
+              width: 80, // Ajusta el ancho de la imagen según tu diseño
+            ),
+          ],
+        )
       ),
       body: IndexedStack(
         index: _currentIndex,
@@ -132,15 +143,15 @@ class _MyHomePageState extends State<MyHomePage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.bluetooth_connected_rounded),
-            label: 'Connection',
+            label: 'Conexión',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmark_rounded),
-            label: 'Test',
+            label: 'Pruebas',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.alarm),
-            label: 'Alert',
+            label: 'Alerta',
           ),
         ],
       ),
@@ -175,7 +186,6 @@ class _MyHomePageState extends State<MyHomePage> {
 void _listenToCharacteristic(BluetoothCharacteristic c){
     c.setNotifyValue(true);
     c.value.listen((value) {
-    print("Esto manda la placa");
    if (value.isNotEmpty && value[0] == 1) {
     print("signal count ");
     print(_signalCount);
@@ -238,7 +248,7 @@ void _listenToCharacteristic(BluetoothCharacteristic c){
                     builder: (BuildContext context) {
                       final alertDialog = AlertDialog(
                         title: Text('Alerta'),
-                        content: Text('¡Alerta enviada! Something happened!'),
+                        content: Text('¡Alerta enviada!'),
                         actions: [
                           ElevatedButton(
                             onPressed: () {

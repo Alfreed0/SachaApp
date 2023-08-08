@@ -6,7 +6,7 @@ class ExternalApiService {
   String token = "23dc8f89b9bc7d616ec410433a088385bf41b15cf0febf2fdbf83f1519f619b5";
   Future<bool> sendAlertToExternalApi(String apiUrl) async {
     String locationMessage = await _getCurrentLocation();
-    String code = "Alerta!! Peligro de seguridad, mi ubicación:";
+    String code = "Alerta!! Estoy en peligro, mi ubicación:";
 
     return await _sendAlertToApi(apiUrl, code, locationMessage); 
   }
@@ -20,7 +20,7 @@ class ExternalApiService {
   }
 
   Future<bool> _sendAlertToApi(String apiUrl, String message, String location) async {
-    print("ENVIANDO ALERTA 2, ANTES DEL POST");
+
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -33,14 +33,14 @@ class ExternalApiService {
 
       if (response.statusCode == 200) {
         print(response);
-        print('Alert sent to external API successfully.');
+        print('Alerta enviada éxitosamente a API externa.');
         return true; 
       } else {
-        print('Error sending alert to external API. Status code: ${response.statusCode}');
+        print('Error al enviar alerta a API externa. Status code: ${response.statusCode}');
         return false; 
       }
     } catch (e) {
-      print('Error sending alert to external API: $e');
+      print('Error al enviar alerta a API externa: $e');
       return false; 
     }
   }
